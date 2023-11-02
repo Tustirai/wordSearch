@@ -1,0 +1,39 @@
+.container {
+    box-sizing: border-box;
+    display: block;
+    font-family: Rubik, sans-serif;
+    min-height: 0px;
+    margin: 0 auto;
+}
+
+.puzzle {
+    margin-top: 300px;
+}
+
+.hint {
+    list-style-type: none;
+    border: 1px solid black;
+}
+
+li {
+    list-style: none;
+    padding: 10px;
+    text-align: center;
+}
+
+.table {
+    border: 1px solid black;
+}
+
+.singleWord {
+    width: 30px;
+    height: 40px;
+    border: 1px solid black;
+    font-size: 25px;
+    text-align: center;
+    margin: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+}
