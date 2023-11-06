@@ -4,6 +4,7 @@
     font-family: Rubik, sans-serif;
     min-height: 0px;
     margin: 0 auto;
+
 }
 
 .puzzle {
@@ -36,4 +37,17 @@ li {
     justify-content: center;
     align-items: center;
     border-radius: 2px;
+}
+
+.found {
+    background-color: pink;
+    color: green;
+}
+
+.selected {
+    background-color: yellow;
+}
+
+.crossed-off {
+    text-decoration: line-through;
 }

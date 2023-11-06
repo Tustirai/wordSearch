@@ -31,7 +31,6 @@ function arrangeGame() {
 	const rows = 14;
 	const cols = 14;
 	let html = "";
-
 	for (let i = 0; i < rows; i++) {
 		html += "<div class='row'>";
 		for (let j = 0; j < cols; j++) {
@@ -39,7 +38,6 @@ function arrangeGame() {
 		}
 		html += "</div>";
 	}
-
 	puzzle.innerHTML = html;
 
 	placeLetters(words);
@@ -47,16 +45,13 @@ function arrangeGame() {
 
 	function placeLetters(myArr) {
 		const positions = ["rows", "column", "diagonal"];
-
 		for (let i = 0; i < myArr.length; i++) {
 			let orientation =
 				positions[Math.floor(Math.random() * positions.length)];
 			let placed = false;
-
 			for (let j = 0; j < 100 && !placed; j++) {
 				let startRow = Math.floor(Math.random() * rows);
 				let startCol = Math.floor(Math.random() * cols);
-
 				if (canPlaceWord(myArr[i], startRow, startCol, orientation)) {
 					placeWord(myArr[i], startRow, startCol, orientation);
 					placed = true;
@@ -67,46 +62,37 @@ function arrangeGame() {
 
 	function canPlaceWord(word, startRow, startCol, orientation) {
 		const wordLength = word.length;
-
 		switch (orientation) {
 			case "rows":
 				if (startCol + wordLength > cols) {
 					return false;
 				}
-
 				for (let i = 0; i < wordLength; i++) {
 					let box = document.querySelector(
 						`.singleWord[data-row='${startRow}'][data-col='${
 							startCol + i
 						}']`
 					);
-
 					if (box.textContent !== "" && box.textContent !== word[i]) {
 						return false;
 					}
 				}
-
 				return true;
-
 			case "column":
 				if (startRow + wordLength > rows) {
 					return false;
 				}
-
 				for (let i = 0; i < wordLength; i++) {
 					let box = document.querySelector(
 						`.singleWord[data-row='${
 							startRow + i
 						}'][data-col='${startCol}']`
 					);
-
 					if (box.textContent !== "" && box.textContent !== word[i]) {
 						return false;
 					}
 				}
-
 				return true;
-
 			case "diagonal":
 				if (
 					startRow + wordLength > rows ||
@@ -114,26 +100,22 @@ function arrangeGame() {
 				) {
 					return false;
 				}
-
 				for (let i = 0; i < wordLength; i++) {
 					let box = document.querySelector(
 						`.singleWord[data-row='${startRow + i}'][data-col='${
 							startCol + i
 						}']`
 					);
-
 					if (box.textContent !== "" && box.textContent !== word[i]) {
 						return false;
 					}
 				}
-
 				return true;
 		}
 	}
 
 	function placeWord(word, startRow, startCol, orientation) {
 		const wordLength = word.length;
-
 		switch (orientation) {
 			case "rows":
 				for (let i = 0; i < wordLength; i++) {
@@ -142,13 +124,10 @@ function arrangeGame() {
 							startCol + i
 						}']`
 					);
-
 					box.textContent = word[i];
 					box.style.whiteSpace = "nowrap";
 				}
-
 				break;
-
 			case "column":
 				for (let i = 0; i < wordLength; i++) {
 					let box = document.querySelector(
@@ -156,13 +135,10 @@ function arrangeGame() {
 							startRow + i
 						}'][data-col='${startCol}']`
 					);
-
 					box.textContent = word[i];
 					box.style.whiteSpace = "nowrap";
 				}
-
 				break;
-
 			case "diagonal":
 				for (let i = 0; i < wordLength; i++) {
 					let box = document.querySelector(
@@ -170,11 +146,9 @@ function arrangeGame() {
 							startCol + i
 						}']`
 					);
-
 					box.textContent = word[i];
 					box.style.whiteSpace = "nowrap";
 				}
-
 				break;
 		}
 	}
@@ -182,13 +156,66 @@ function arrangeGame() {
 	function fillEmptySpaces() {
 		const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		const emptySpaces = document.querySelectorAll(".singleWord:empty");
-
 		emptySpaces.forEach((space) => {
 			const randomLetter = letters.charAt(
 				Math.floor(Math.random() * letters.length)
 			);
-
 			space.textContent = randomLetter;
 		});
+	}
+
+	let puzzleCells = document.querySelectorAll(".singleWord");
+	puzzleCells.forEach((cell) => {
+		cell.addEventListener("mousedown", () => {
+			// Update selected word
+			selectedWord += cell.textContent;
+			// Add selected class to cell
+			cell.classList.add("selected");
+			// Highlight cells that belong to selected word
+			highlight();
+		});
+		cell.addEventListener("mouseover", () => {
+			// Add selected class to cell
+			cell.classList.add("selected");
+			// Update selected word
+			selectedWord += cell.textContent;
+			// Highlight cells that belong to selected word
+			highlight();
+		});
+		cell.addEventListener("mouseup", () => {
+			// Remove selected class from cell
+			cell.classList.remove("selected");
+			// Update selected word
+			selectedWord.replace(cell.textContent, "");
+			// Highlight cells that belong to selected word
+			highlight();
+		});
+	});
+
+	function highlight() {
+		// Get all cells that belong to selected word
+		const selectedCells = document.querySelectorAll(`.singleWord.selected`);
+		// Check if selected cells form a valid word
+		const selectedWord = Array.from(selectedCells)
+			.map((cell) => cell.textContent)
+			.join("");
+		if (words.includes(selectedWord)) {
+			// Highlight cells that belong to selected word
+			selectedCells.forEach((cell) => {
+				cell.classList.add("found");
+			});
+			// Cross off word in hint list
+			const hintList = document.querySelectorAll("#hint li");
+			hintList.forEach((hint) => {
+				if (hint.textContent === selectedWord) {
+					hint.classList.add("crossed-off");
+				}
+			});
+		} else {
+			// Deselect cells that do not form a valid word
+			selectedCells.forEach((cell) => {
+				cell.classList.remove("selected");
+			});
+		}
 	}
 }
