@@ -163,59 +163,55 @@ function arrangeGame() {
 			space.textContent = randomLetter;
 		});
 	}
-
+	let selectedWord = "";
 	let puzzleCells = document.querySelectorAll(".singleWord");
 	puzzleCells.forEach((cell) => {
 		cell.addEventListener("mousedown", () => {
 			// Update selected word
-			selectedWord += cell.textContent;
+			selectedWord = cell.textContent;
 			// Add selected class to cell
 			cell.classList.add("selected");
 			// Highlight cells that belong to selected word
 			highlight();
 		});
 		cell.addEventListener("mouseover", () => {
-			// Add selected class to cell
+			// Remove selected class from all cells
+			puzzleCells.forEach((cell) => {
+				cell.classList.remove("selected");
+			});
+			// Add selected class to current cell
 			cell.classList.add("selected");
-			// Update selected word
-			selectedWord += cell.textContent;
-			// Highlight cells that belong to selected word
-			highlight();
-		});
-		cell.addEventListener("mouseup", () => {
-			// Remove selected class from cell
-			cell.classList.remove("selected");
-			// Update selected word
-			selectedWord.replace(cell.textContent, "");
 			// Highlight cells that belong to selected word
 			highlight();
 		});
 	});
+	console.log(puzzleCells);
+}
 
-	function highlight() {
-		// Get all cells that belong to selected word
-		const selectedCells = document.querySelectorAll(`.singleWord.selected`);
-		// Check if selected cells form a valid word
-		const selectedWord = Array.from(selectedCells)
-			.map((cell) => cell.textContent)
-			.join("");
-		if (words.includes(selectedWord)) {
-			// Highlight cells that belong to selected word
-			selectedCells.forEach((cell) => {
-				cell.classList.add("found");
-			});
-			// Cross off word in hint list
-			const hintList = document.querySelectorAll("#hint li");
-			hintList.forEach((hint) => {
-				if (hint.textContent === selectedWord) {
-					hint.classList.add("crossed-off");
-				}
-			});
-		} else {
-			// Deselect cells that do not form a valid word
-			selectedCells.forEach((cell) => {
-				cell.classList.remove("selected");
-			});
-		}
+function highlight() {
+	// Get all cells that belong to selected word
+	const selectedCells = document.querySelectorAll(`.singleWord.selected`);
+	// Check if selected cells form a valid word
+	const selectedWord = Array.from(selectedCells)
+		.map((cell) => cell.textContent)
+		.join("");
+	if (words.includes(selectedWord)) {
+		// Highlight cells that belong to selected word
+		selectedCells.forEach((cell) => {
+			cell.classList.add("found");
+		});
+
+		// Cross off word in hint list
+		const hintList = document.querySelectorAll("#hint li");
+		hintList.forEach((hint) => {
+			if (hint.textContent === selectedWord) {
+				hint.classList.add("crossed-off");
+			}
+		});
+	} else {
+		// Deselect cells that do not form a valid word
+		selectedCells.forEach((cell) => {
+			cell.classList.remove("selected");
+		});
 	}
 }
