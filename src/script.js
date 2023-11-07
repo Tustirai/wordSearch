@@ -230,8 +230,20 @@ function highlight() {
 		cell.style.borderRadius = "50%";
 		cell.style.border = "2px solid white";
 	});
-	crossoff();
+	// Check if selected word is a valid word
+	const selectedWord = Array.from(
+		document.querySelectorAll(".singleWord.selected")
+	)
+		.map((cell) => cell.textContent)
+		.join("");
+
+	// If the selected word is a valid word, then call the crossoff function
+	if (words.includes(selectedWord)) {
+		crossoff();
+	}
 }
+
+const foundWords = [];
 
 function crossoff() {
 	// Check if selected word is in the list of words
@@ -240,9 +252,14 @@ function crossoff() {
 	)
 		.map((cell) => cell.textContent)
 		.join("");
-	if (!words.includes(selectedWord)) {
+
+	// If the selected word has already been found, then return
+	if (foundWords.includes(selectedWord)) {
 		return;
 	}
+
+	// Add the selected word to the list of found words
+	foundWords.push(selectedWord);
 
 	// Highlight cells that belong to selected word
 	document.querySelectorAll(".singleWord.selected").forEach((cell) => {
@@ -260,4 +277,7 @@ function crossoff() {
 	document.querySelectorAll(".singleWord.selected").forEach((cell) => {
 		cell.classList.remove("selected");
 	});
+
+	// Call the crossoff function again for the next word in the list
+	crossoff();
 }
