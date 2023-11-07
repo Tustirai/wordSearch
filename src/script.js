@@ -1,19 +1,17 @@
 const words = [
-	"BUDGETING",
-	"SAVINGS",
-	"INVESTING",
-	"RETIREMENT",
-	"DEBT",
-	"CREDIT",
-	"INCOME",
-	"EXPENSES",
-	"RENT",
-	"PAYMENTS",
-	"EMPLOYMENT",
-	"CASH",
-	"EMERGENCY",
-	"GOALS",
-	"WEALTH",
+	"IMPROVEMENT",
+	"WORK",
+	"RELATIONSHIPS",
+	"HEALTH",
+	"ANXIETY",
+	"MONEY",
+	"LOVE",
+	"FAMILY",
+	"FRIENDSHIP",
+	"BODY",
+	"MOTIVATION",
+	"CONFIDENCE",
+	"GRATITUDE",
 ];
 
 const puzzle = document.querySelector("#puzzleArea");
@@ -236,30 +234,30 @@ function highlight() {
 }
 
 function crossoff() {
-	// Get all cells that belong to selected word
-	const selectedCells = document.querySelectorAll(".singleWord.selected");
-
-	// Check if selected cells form a valid word
-	const selectedWord = Array.from(selectedCells)
+	// Check if selected word is in the list of words
+	const selectedWord = Array.from(
+		document.querySelectorAll(".singleWord.selected")
+	)
 		.map((cell) => cell.textContent)
 		.join("");
-	if (words.includes(selectedWord)) {
-		// Highlight cells that belong to selected word
-		selectedCells.forEach((cell) => {
-			cell.classList.add("found");
-		});
-
-		// Cross off word in hint list
-		const hintList = document.querySelectorAll("#hint li");
-		hintList.forEach((hint) => {
-			if (hint.textContent === selectedWord) {
-				hint.classList.add("crossed-off");
-			}
-		});
-	} else {
-		// Deselect cells that do not form a valid word
-		selectedCells.forEach((cell) => {
-			cell.classList.remove("selected");
-		});
+	if (!words.includes(selectedWord)) {
+		return;
 	}
+
+	// Highlight cells that belong to selected word
+	document.querySelectorAll(".singleWord.selected").forEach((cell) => {
+		cell.classList.add("found");
+	});
+
+	// Cross off word in hint list
+	document.querySelectorAll("#hint li").forEach((hint) => {
+		if (hint.textContent === selectedWord) {
+			hint.classList.add("crossed-off");
+		}
+	});
+
+	// Deselect cells that do not form a valid word
+	document.querySelectorAll(".singleWord.selected").forEach((cell) => {
+		cell.classList.remove("selected");
+	});
 }
