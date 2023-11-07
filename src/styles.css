@@ -4,6 +4,7 @@
     font-family: Rubik, sans-serif;
     min-height: 0px;
     margin: 0 auto;
+    outline: none;
 }
 
 .puzzle {
@@ -44,9 +45,31 @@ li {
 }
 
 .selected {
-    background-color: yellow;
+    background-color: pink;
+    border-radius: 50%;
+    border: 2px solid white;
+    outline: none;
+
 }
 
 .crossed-off {
     text-decoration: line-through;
+}
+
+.singleWord:focus {
+    outline: none;
+}
+
+.noSelect {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.noSelect:focus {
+    outline: none !important;
 }

@@ -85,9 +85,7 @@ function arrangeGame() {
 			// Log selected word to console
 			console.log(selectedWord);
 			// Clear selected cells and word
-			selectedCells.forEach((cell) => {
-				cell.classList.remove("selected");
-			});
+
 			selectedCells = [];
 			selectedWord = "";
 		});
@@ -159,6 +157,21 @@ function canPlaceWord(word, startRow, startCol, orientation) {
 				}
 			}
 			return true;
+		case "diagonal-reverse":
+			if (startRow + 1 - wordLength < 0 || startCol + wordLength > cols) {
+				return false;
+			}
+			for (let i = 0; i < wordLength; i++) {
+				let box = document.querySelector(
+					`.singleWord[data-row='${startRow - i}'][data-col='${
+						startCol + i
+					}']`
+				);
+				if (box.textContent !== "" && box.textContent !== word[i]) {
+					return false;
+				}
+			}
+			return true;
 	}
 }
 
@@ -213,9 +226,11 @@ function fillEmptySpaces() {
 }
 
 function highlight() {
-	let choosenWord = document.querySelectorAll(".singleWord.selected");
-	choosenWord.forEach((cell) => {
+	let chosenWord = document.querySelectorAll(".singleWord.selected");
+	chosenWord.forEach((cell) => {
 		cell.style.backgroundColor = "pink";
+		cell.style.borderRadius = "50%";
+		cell.style.border = "2px solid white";
 	});
 	crossoff();
 }
